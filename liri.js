@@ -1,4 +1,5 @@
-var spotify=require('node-spotify-api');
+// setting up variables and installing npm packages as per instructions.
+var spotify=require('node-spotify-api'); 
 var dotenv=require('dotenv').config();
 var twitter=require('twitter');
 var request = require("request");
@@ -7,15 +8,14 @@ var secret=require('./keys.js');
 var client=new twitter(secret.twitter);
 var spotify=new spotify(secret.spotify);
 var fs = require('fs');
-// var action = process.argv[2];
-var value= process.argv[3];
+
 startApp();
 function startApp() {
     inquirer
         .prompt([
             {
                 type: 'list',
-                message: 'what would you like to do',
+                message: 'what would you like to do?',
                 choices: ['my-tweets', 'spotify', 'omdb', 'random','quit'],
                 name: 'selection'
             }
@@ -29,7 +29,7 @@ function startApp() {
            inquirer
            .prompt([{
                type:'input',
-               message:'what song',
+               message:'what song would you like to search?',
                name:'songSelection'
            }]).then(data =>{
                if(!data.songSelection)
@@ -45,7 +45,7 @@ function startApp() {
         inquirer.prompt([
             {
                 type: 'input',
-                message: 'What movie?',
+                message: 'What movie would you like to search?',
                 name:'movieData'
             }
         ]).then(movie =>{
@@ -70,8 +70,7 @@ function startApp() {
 
 function omdbThis(value){
     var key='&apikey=f98d3aa7';
-   
-    // console.log('data.title');
+
     request('http://www.omdbapi.com/?t=' + value + key, function (error, response, body) {
     var data=JSON.parse(body);
         if (!error && response.statusCode == 200) {
@@ -121,22 +120,18 @@ function spotifyThis(song){
           console.log(err)
     }
       else{
-        console.log("song name");
-        console.log(res.tracks.items[0].name);
-        console.log("artist name");
-        console.log(res.tracks.items[0].album.artists[0].name);
-        console.log("album name");
-        console.log(res.tracks.items[0].album.name);
-        console.log("url");
-        console.log(res.tracks.items[0].preview_url);
+        console.log("Song Name: "+res.tracks.items[0].name);
+        console.log("Artist Name: "+res.tracks.items[0].album.artists[0].name);
+        console.log("Album Name: "+res.tracks.items[0].album.name);
+        console.log("URL: "+res.tracks.items[0].preview_url);
     }
   });
 }
 
 function random(){
-fs.readFile("random.txt", "utf8", function(error, data) {
-    if (error) {
-        return console.log(error);
+fs.readFile("random.txt", "utf8", function(err, data) {
+    if (err) {
+        return console.log(err);
       } else {
         var dataArr = data.split(',');
         if (dataArr[0] === 'spotify-this-song') {
